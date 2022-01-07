@@ -1,0 +1,68 @@
+local Camera = workspace.CurrentCamera
+Holding = false
+function findGoals()
+    for i, v in pairs(workspace:GetDescendants()) do
+        if v.Name == 'HitRim4' then
+            v.Parent = workspace
+        end
+    end
+end
+local function findFurthestPart(position)
+    local closestPart, closestPartMagnitude
+    local tmpMagnitude
+    for i, v in pairs(workspace:GetChildren()) do
+        if v.Name == 'HitRim4' then
+            if closestPart then
+                tmpMagnitude = (position - v.Position).magnitude
+                if tmpMagnitude > closestPartMagnitude then
+                    closestPart = v
+                    closestPartMagnitude = tmpMagnitude
+                end
+            else
+                closestPart = v
+                closestPartMagnitude = (position - v.Position).magnitude
+            end
+        end
+    end
+    return closestPart
+end
+
+local function findClosestPart(position)
+    local closestPart, closestPartMagnitude
+    local tmpMagnitude
+    for i, v in pairs(workspace:GetChildren()) do
+        if v.Name == 'HitRim4' then
+            if closestPart then
+                tmpMagnitude = (position - v.Position).magnitude
+                if tmpMagnitude < closestPartMagnitude then
+                    closestPart = v
+                    closestPartMagnitude = tmpMagnitude
+                end
+            else
+                closestPart = v
+                closestPartMagnitude = (position - v.Position).magnitude
+            end
+        end
+    end
+    return closestPart
+end
+findGoals()
+local UIS = game:GetService('UserInputService')
+UIS.InputBegan:connect(function(Input, GPE)
+    if not GPE and Input.KeyCode == Enum.KeyCode.B then
+        local lookthat = findClosestPart(game.Players.LocalPlayer.Character.Torso.Position)
+        local further = findFurthestPart(game.Players.LocalPlayer.Character.Torso.Position)
+        Holding = true
+            wait(0.01)
+            if getgenv().closestgoal == true then
+       lookthat.Size = Vector3.new(1000, 1000, 1000) 
+       wait(1)
+   lookthat.Size = Vector3.new(1, 1, 1) 
+   end
+    if getgenv().fullcourt == true then
+     further.Size = Vector3.new(1000, 1000, 1000)
+     wait(1)
+     lookthat.Size = Vector3.new(1, 1, 1) 
+     end
+            end
+end)
